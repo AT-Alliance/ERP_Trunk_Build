@@ -18,40 +18,7 @@ pipeline {
             bat '"%WORKSPACE%\\build\\nuget.exe" restore "%WORKSPACE%\\GCRADC.sln"'
           }
         }
-      
-        stage('ERP_B-2_PurgeLivrables') {
-          steps {
-            script {
-              try {
-                powershell '''
-$DirectoryToPurgeEnv="$($env:DirectoryToPurgeEnv)"
-$ExcludeFolderEnv="$($env:ExcludeFolderEnv)"
-$count=0
-#Creer le repertoire de base du livrable s\'il n\'existe pas
-Try {
-    if ( Test-Path $($DirectoryToPurge) ) {
-	    $getAllFilesLivrableDirectory=(gci $DirectoryToPurge | Where-Object { $_.Name -ne "$($ExcludeFolder)" })
-	    $getAllFilesLivrableDirectory |%{
-		    Remove-Item $($_.Fullname) -Recurse -Force
-		    "Item \'$($_.Fullname)\' deleted"
-		    $count++
-	    }
-	    "---"
-	    "$($count) item(s) purgés dans \'$($DirectoryToPurge)\'"
-	    "---"		  
-    }
-} catch {
-    "An error occurred: $_"
-}
-'''
-                println "Purge \'$DirectoryToPurgeEnv\' success!!"
-              } catch (err){
-                println "Purge \'$DirectoryToPurgeEnv\' failed: ${err}!!"
-              }
-            }
-          }
-        }
-	    
+      }
     }
   }
 }
