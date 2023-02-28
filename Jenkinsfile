@@ -66,15 +66,17 @@ Try {
           steps {
             script {
               powershell '''
-$SvnBin = "$($env:SvnBinEnv)"
+$SvnBin="$($env:SvnBinEnv)"
 #$SvnBin = "C:\\Program Files\\TortoiseSVN\\bin\\svn"
-$SvnRepositoryUrl = "$($env:SvnRepositoryUrlEnv)"
+$SvnRepositoryUrl="$($env:SvnRepositoryUrlEnv)"
 #$SvnRepositoryUrl = "https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk"
-$BaseOutputRootDirectory = "$($env:BaseOutputRootDirectoryEnv)"
+$BaseOutputRootDirectory="$($env:BaseOutputRootDirectoryEnv)"
 #$BaseOutputRootDirectory = "C:\\Livrables"
-$BaseOutputDirectory = "$($env:BaseOutputDirectoryEnv)"
+$BaseOutputRootDirectory="$($env:BaseOutputRootDirectoryEnv)"
+#$BaseOutputRootDirectory = "C:\\Livrables"
+$BaseOutputDirectory="$($env:BaseOutputDirectoryEnv)"
 #$BaseOutputDirectory = "All_dotnet"
-$DestinationDirectoryName = "$($env:DestinationDirectoryNameEnv)"
+$DestinationDirectoryName="$($env:DestinationDirectoryNameEnv)"
 #$DestinationDirectoryName = "SvnFolderForDelivery"
 
 $DestinationDirectory = "$($BaseOutputRootDirectory)\\$($BaseOutputDirectory)"
@@ -91,7 +93,7 @@ $DestinationDirectory = "$($DestinationDirectory)\\$($DestinationDirectoryName)"
 if ( Test-Path $($DestinationDirectory) ) {
     
     try {
-        . "$($SvnBin)" info "$($SvnRepositoryUrl)" --username atjenkins --password atjenkins | Out-File "$($DestinationDirectory)\\svn_lastest_commit.txt"
+        . "$($SvnBin)" info "$($SvnRepositoryUrl)" --username atjenkins --password atjenkins --non-interactive --trust-server-cert-failures="other,unknown-ca,expired" | Out-File "$($DestinationDirectory)\\svn_lastest_commit.txt"
         "Last Commit in \'$($DestinationDirectory)\\svn_lastest_commit.txt\'"
     } catch {
         " Get Last Commit failed: $_"
