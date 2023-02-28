@@ -94,7 +94,7 @@ if ( Test-Path $($DestinationDirectory) ) {
     
     #try {
     	$svn_lastest_commit = "svn_lastest_commit.txt"
-        . "$($SvnBin)" info "$($SvnRepositoryUrl)" --username atjenkins --password atjenkins --no-auth-cache --trust-server-cert --non-interactive | Out-File "$($DestinationDirectory)\\$($svn_lastest_commit)"
+        . "$($SvnBin)" info "$($SvnRepositoryUrl)" --non-interactive --trust-server-cert-failures="other,unknown-ca,expired" --username atjenkins --password atjenkins | Out-File "$($DestinationDirectory)\\$($svn_lastest_commit)"
         "Last Commit in \'$($DestinationDirectory)\\$($svn_lastest_commit)\'"
     #} catch {
      #   " Get Last Commit failed: $_"
