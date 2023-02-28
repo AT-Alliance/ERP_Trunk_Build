@@ -23,11 +23,11 @@ pipeline {
           steps {
             script {
               powershell '''
-$DirectoryToPurge = "$($env:DirectoryToPurgeEnv)"
-#$DirectoryToPurge = "C:\\Livrables"
-$ExcludeFolder = "$($env:ExcludeFolderEnv)"
+$DirectoryToPurge="$($env:DirectoryToPurgeEnv)"
+#$DirectoryToPurge = "C:\\LivrablesAll_dotnet\\Common"
+$ExcludeFolder="$($env:ExcludeFolderEnv)"
 #$excludeFolder = "SvnFolderForDelivery"
-$count = 0
+$count=0
 
 Try {
     if ( Test-Path $($DirectoryToPurge) ) {
@@ -38,13 +38,18 @@ Try {
 		    $count++
 	    }
 	    "---"
-	    "$($count) item(s) purgés dans \'$($DirectoryToPurge)\'"
+	    "$($count) item(s) removed in \'$($DirectoryToPurge)\'"
+        if ( $ExcludeFolder -ne $null ) {
+            "Folder \'$ExcludeFolder\' exluded !!"
+        }
 	    "---"
-      Purge \'$DirectoryToPurgeEnv\' success!!
+        "Purge \'$DirectoryToPurge\' success!!"
+        
     }
 } catch {
-    "Purge \'$DirectoryToPurgeEnv\' failed: $_"
-}'''
+    "Purge \'$DirectoryToPurge\' failed: $_"
+}
+'''
             }
           }
         }
