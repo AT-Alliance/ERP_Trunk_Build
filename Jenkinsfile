@@ -22,12 +22,13 @@ pipeline {
         stage('ERP_B-2_PurgeLivrables') {
           steps {
             script {
-              try {
-                powershell '''
-$DirectoryToPurgeEnv="$($env:DirectoryToPurgeEnv)"
-$ExcludeFolderEnv="$($env:ExcludeFolderEnv)"
-$count=0
-#Creer le repertoire de base du livrable s\'il n\'existe pas
+              powershell '''
+$DirectoryToPurge = "$($env:DirectoryToPurgeEnv)"
+#$DirectoryToPurge = "C:\\Livrables"
+$ExcludeFolder = "$($env:ExcludeFolderEnv)"
+#$excludeFolder = "SvnFolderForDelivery"
+$count = 0
+
 Try {
     if ( Test-Path $($DirectoryToPurge) ) {
 	    $getAllFilesLivrableDirectory=(gci $DirectoryToPurge | Where-Object { $_.Name -ne "$($ExcludeFolder)" })
@@ -38,17 +39,12 @@ Try {
 	    }
 	    "---"
 	    "$($count) item(s) purgés dans \'$($DirectoryToPurge)\'"
-	    "---"		  
+	    "---"
+      Purge \'$DirectoryToPurgeEnv\' success!!
     }
 } catch {
-    "An error occurred: $_"
-}
-
-'''
-                println "Purge \'$DirectoryToPurgeEnv\' success!!"
-              } catch (err){
-                println "Purge \'$DirectoryToPurgeEnv\' failed: ${err}!!"
-              }
+    "Purge \'$DirectoryToPurgeEnv\' failed: $_"
+}'''
             }
           }
         }
