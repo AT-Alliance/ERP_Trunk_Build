@@ -60,7 +60,7 @@ Try {
             SvnBinEnv = 'C:\\Program Files\\TortoiseSVN\\bin\\svn'
             SvnRepositoryUrlEnv = 'https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk'
             BaseOutputRootDirectoryEnv = 'C:\\Livrables'
-            BaseOutputDirectoryEnv = 'C:\\Livrables'
+            BaseOutputDirectoryEnv = 'All_dotnet'
             DestinationDirectoryName = 'SvnFolderForDelivery'
           }
           steps {
