@@ -92,13 +92,13 @@ $DestinationDirectory = "$($DestinationDirectory)\\$($DestinationDirectoryName)"
 
 if ( Test-Path $($DestinationDirectory) ) {
     
-    try {
+    #try {
     	$svn_lastest_commit = "svn_lastest_commit.txt"
         . "$($SvnBin)" info "$($SvnRepositoryUrl)" --username atjenkins --password atjenkins --no-auth-cache --trust-server-cert --non-interactive | Out-File "$($DestinationDirectory)\\$($svn_lastest_commit)"
         "Last Commit in \'$($DestinationDirectory)\\$($svn_lastest_commit)\'"
-    } catch {
-        " Get Last Commit failed: $_"
-    }
+    #} catch {
+     #   " Get Last Commit failed: $_"
+    #}
 }'''
             }
           }
