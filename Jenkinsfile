@@ -8,10 +8,7 @@ pipeline {
     }
     
     stage('ParallelStage_1') {
-      environment {
-        DirectoryToPurgeEnv = 'C:\\Livrables\\All_dotnet'
-	      ExcludeFolderEnv = 'SvnFolderForDelivery'
-      }
+      
       parallel {
         stage('ERP_B-1_RestoreNuget') {
           steps {
@@ -20,6 +17,10 @@ pipeline {
         }
         
         stage('ERP_B-2_PurgeLivrables') {
+	        environment {
+            DirectoryToPurgeEnv = 'C:\\Livrables\\All_dotnet'
+            ExcludeFolderEnv = 'SvnFolderForDelivery'
+          }
           steps {
             script {
               powershell '''
@@ -54,17 +55,29 @@ Try {
           }
         }
 	      
-        stage('ERP_B-2_PurgeLivrables') {
+        stage('ERP_B-3_GetLastCommit') {
+          environment {
+            SvnBinEnv = 'C:\\Program Files\\TortoiseSVN\\bin\\svn'
+            SvnRepositoryUrlEnv = 'https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk'
+            BaseOutputRootDirectoryEnv = 'C:\\Livrables'
+            BaseOutputDirectoryEnv = 'C:\\Livrables'
+            DestinationDirectoryName = 'SvnFolderForDelivery'
+          }
           steps {
             script {
               powershell '''
-$SvnBin = "C:\\Program Files\\TortoiseSVN\\bin\\svn"
-$SvnRepositoryUrl = "https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk"
+$SvnBin = "$($env:SvnBinEnv)"
+#$SvnBin = "C:\\Program Files\\TortoiseSVN\\bin\\svn"
+$SvnRepositoryUrl = "$($env:SvnRepositoryUrlEnv)"
+#$SvnRepositoryUrl = "https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk"
+$BaseOutputRootDirectory = "$($env:BaseOutputRootDirectoryEnv)"
+#$BaseOutputRootDirectory = "C:\\Livrables"
+$BaseOutputDirectory = "$($env:BaseOutputDirectoryEnv)"
+#$BaseOutputDirectory = "All_dotnet"
+$DestinationDirectoryName = "$($env:DestinationDirectoryNameEnv)"
+#$DestinationDirectoryName = "SvnFolderForDelivery"
 
-$BaseOutputRootDirectory = "C:\\Livrables"
-$BaseOutputDirectory = "All_dotnet"
 $DestinationDirectory = "$($BaseOutputRootDirectory)\\$($BaseOutputDirectory)"
-$DestinationDirectoryName = "SvnFolderForDelivery"
 
 if ( -not (Test-Path "$($DestinationDirectory)\\$($DestinationDirectoryName)") -and ($($DestinationDirectoryName) -ne "") ) {
     
