@@ -18,8 +18,8 @@ pipeline {
             bat '"%WORKSPACE%\\build\\nuget.exe" restore "%WORKSPACE%\\GCRADC.sln"'
           }
         }
-      }
-      stage('ERP_B-2_PurgeLivrables') {
+      
+        stage('ERP_B-2_PurgeLivrables') {
           steps {
             script {
               try {
@@ -51,7 +51,7 @@ Try {
             }
           }
         }
-	    }
+	    
     }
   }
 }
