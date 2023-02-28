@@ -40,7 +40,7 @@ Try {
 	    "---"
 	    "$($count) item(s) removed in \'$($DirectoryToPurge)\'"
         if ( $ExcludeFolder -ne $null ) {
-            "Folder \'$ExcludeFolder\' exluded !!"
+            "Folder \'$ExcludeFolder\\\' exluded !!"
         }
 	    "---"
         "Purge \'$DirectoryToPurge\' success!!"
@@ -53,7 +53,42 @@ Try {
             }
           }
         }
-	     
+	      
+        stage('ERP_B-2_PurgeLivrables') {
+          steps {
+            script {
+              powershell '''
+$SvnBin = "C:\\Program Files\\TortoiseSVN\\bin\\svn"
+$SvnRepositoryUrl = "https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk"
+
+$BaseOutputRootDirectory = "C:\\Livrables"
+$BaseOutputDirectory = "All_dotnet"
+$DestinationDirectory = "$($BaseOutputRootDirectory)\\$($BaseOutputDirectory)"
+$DestinationDirectoryName = "SvnFolderForDelivery"
+
+if ( -not (Test-Path "$($DestinationDirectory)\\$($DestinationDirectoryName)") -and ($($DestinationDirectoryName) -ne "") ) {
+    
+    New-Item -ItemType Directory "$($DestinationDirectory)\\$($DestinationDirectoryName)"
+    "`nLe repertoire \'$($DestinationDirectoryName)\' inexistant a ete créé dans \'$($DestinationDirectory)\'`n"
+    "-------------------------"
+}
+
+$DestinationDirectory = "$($DestinationDirectory)\\$($DestinationDirectoryName)"
+
+if ( Test-Path $($DestinationDirectory) ) {
+    
+    try {
+        . "$($SvnBin)" info "$($SvnRepositoryUrl)" --username atjenkins --password atjenkins | Out-File "$($DestinationDirectory)\\svn_lastest_commit.txt"
+        "Last Commit in \'$($DestinationDirectory)\\svn_lastest_commit.txt\'"
+    } catch {
+        " Get Last Commit failed: $_"
+    }
+}'''
+            }
+          }
+        }
+        
+        
       }
     }
   }
