@@ -61,7 +61,7 @@ Try {
             SvnRepositoryUrlEnv = 'https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk'
             BaseOutputRootDirectoryEnv = 'C:\\Livrables'
             BaseOutputDirectoryEnv = 'All_dotnet'
-            DestinationDirectoryName = 'SvnFolderForDelivery'
+            DestinationDirectoryNameEnv = 'SvnFolderForDelivery'
           }
           steps {
             script {
@@ -94,7 +94,7 @@ if ( Test-Path $($DestinationDirectory) ) {
     
     try {
     	$svn_lastest_commit = "svn_lastest_commit.txt"
-        . "$($SvnBin)" info "$($SvnRepositoryUrl)" --username atjenkins --password atjenkins --non-interactive --trust-server-cert-failures="other,unknown-ca,expired" | Out-File "$($DestinationDirectory)\$($svn_lastest_commit)"
+        . "$($SvnBin)" info "$($SvnRepositoryUrl)" --username atjenkins --password atjenkins --no-auth-cache --trust-server-cert --non-interactive | Out-File "$($DestinationDirectory)\$($svn_lastest_commit)"
         "Last Commit in \'$($DestinationDirectory)\$($svn_lastest_commit)\'"
     } catch {
         " Get Last Commit failed: $_"
