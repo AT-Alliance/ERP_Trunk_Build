@@ -10,7 +10,7 @@ pipeline {
             powershell '''
 $workspace = pwd
 "$workspace"
-. "$workspace"\\build\\nuget.exe restore "$workspace"\\GCRADC.sln"
+. "$workspace"\\build\\nuget.exe restore "$workspace"\\GCRADC.sln
             '''
           }
         }
