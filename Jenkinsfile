@@ -7,7 +7,6 @@ pipeline {
 $workspace = pwd
 . $workspace\\build\\nuget.exe restore $workspace\\GCRADC.sln
           '''
-        }
       }
     }
   }
