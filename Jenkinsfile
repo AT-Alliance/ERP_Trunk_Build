@@ -29,8 +29,8 @@ pipeline {
               powershell '''
 $SvnBin="$($env:SvnBinEnv)"
 #$SvnBin = "C:\\Program Files\\TortoiseSVN\\bin\\svn"
-#$SvnRepositoryUrl="$($env:SvnRepositoryUrlEnv)"
-$SvnRepositoryUrl = "https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk"
+$SvnRepositoryUrl="$($env:SvnRepositoryUrlEnv)"
+#$SvnRepositoryUrl = "https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk"
 $BaseOutputRootDirectory="$($env:BaseOutputRootDirectoryEnv)"
 #$BaseOutputRootDirectory = "C:\\Livrables"
 $BaseOutputRootDirectory="$($env:BaseOutputRootDirectoryEnv)"
