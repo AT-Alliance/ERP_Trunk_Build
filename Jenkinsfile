@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
         stages {
@@ -13,4 +12,3 @@ $workspace = pwd
         }
     }
 }
-    
