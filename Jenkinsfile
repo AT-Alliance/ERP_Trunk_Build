@@ -3,10 +3,12 @@ pipeline {
     stages {
       stage('ERP_B-1_RestoreNuget') {
         steps {
-          powershell '''
+          script {
+            powershell '''
 $workspace = pwd
 . $workspace\\build\\nuget.exe restore $workspace\\GCRADC.sln
           '''
+        }
       }
     }
   }
