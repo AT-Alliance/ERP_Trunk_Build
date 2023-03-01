@@ -9,7 +9,7 @@ pipeline {
           steps {
             powershell '''
 	    $workspace = pwd
-	    $workspace
+	    "$workspace"
  #. "$workspace\\build\\nuget.exe" restore "$workspace\\GCRADC.sln"'''
           }
         }
