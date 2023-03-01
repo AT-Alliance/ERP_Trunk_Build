@@ -15,47 +15,8 @@ pipeline {
             bat '"%WORKSPACE%\\build\\nuget.exe" restore "%WORKSPACE%\\GCRADC.sln"'
           }
         }
-        
-        stage('ERP_B-2_PurgeLivrables') {
-	        environment {
-            DirectoryToPurgeEnv = 'C:\\Livrables\\All_dotnet'
-            ExcludeFolderEnv = 'SvnFolderForDelivery'
-          }
-          steps {
-            script {
-              powershell '''
-$DirectoryToPurge="$($env:DirectoryToPurgeEnv)"
-#$DirectoryToPurge = "C:\\LivrablesAll_dotnet\\Common"
-$ExcludeFolder="$($env:ExcludeFolderEnv)"
-#$excludeFolder = "SvnFolderForDelivery"
-$count=0
-
-Try {
-    if ( Test-Path $($DirectoryToPurge) ) {
-	    $getAllFilesLivrableDirectory=(gci $DirectoryToPurge | Where-Object { $_.Name -ne "$($ExcludeFolder)" })
-	    $getAllFilesLivrableDirectory |%{
-		    Remove-Item $($_.Fullname) -Recurse -Force
-		    "Item \'$($_.Fullname)\' deleted"
-		    $count++
-	    }
-	    "---"
-	    "$($count) item(s) removed in \'$($DirectoryToPurge)\'"
-        if ( $ExcludeFolder -ne $null ) {
-            "Folder \'$ExcludeFolder\\\' exluded !!"
-        }
-	    "---"
-        "Purge \'$DirectoryToPurge\' success!!"
-        
-    }
-} catch {
-    "Purge \'$DirectoryToPurge\' failed: $_"
-}
-'''
-            }
-          }
-        }
-	      
-        stage('ERP_B-3_GetLastCommit') {
+        	      
+        stage('ERP_B-2_GetLastCommit') {
           environment {
             SvnBinEnv = 'C:\\Program Files\\TortoiseSVN\\bin\\svn'
             SvnRepositoryUrlEnv = 'https://alliance-vm03/svn/ERP_ALLIANCE_ARMAND/trunk'
@@ -100,6 +61,45 @@ if ( Test-Path $($DestinationDirectory) ) {
         " Get Last Commit failed: $_"
     }
 }'''
+            }
+          }
+        }
+        
+        stage('ERP_B-3_PurgeLivrables') {
+	        environment {
+            DirectoryToPurgeEnv = 'C:\\Livrables\\All_dotnet'
+            ExcludeFolderEnv = 'SvnFolderForDelivery'
+          }
+          steps {
+            script {
+              powershell '''
+$DirectoryToPurge="$($env:DirectoryToPurgeEnv)"
+#$DirectoryToPurge = "C:\\LivrablesAll_dotnet\\Common"
+$ExcludeFolder="$($env:ExcludeFolderEnv)"
+#$excludeFolder = "SvnFolderForDelivery"
+$count=0
+
+Try {
+    if ( Test-Path $($DirectoryToPurge) ) {
+	    $getAllFilesLivrableDirectory=(gci $DirectoryToPurge | Where-Object { $_.Name -ne "$($ExcludeFolder)" })
+	    $getAllFilesLivrableDirectory |%{
+		    Remove-Item $($_.Fullname) -Recurse -Force
+		    "Item \'$($_.Fullname)\' deleted"
+		    $count++
+	    }
+	    "---"
+	    "$($count) item(s) removed in \'$($DirectoryToPurge)\'"
+        if ( $ExcludeFolder -ne $null ) {
+            "Folder \'$ExcludeFolder\\\' exluded !!"
+        }
+	    "---"
+        "Purge \'$DirectoryToPurge\' success!!"
+        
+    }
+} catch {
+    "Purge \'$DirectoryToPurge\' failed: $_"
+}
+'''
             }
           }
         }
